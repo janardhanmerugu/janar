@@ -1,3 +1,4 @@
+/* === Global === */
 body {
   font-family: "Segoe UI", Arial, sans-serif;
   background-color: #f4f6f8;
@@ -8,26 +9,29 @@ body {
 
 h1 {
   color: #007bff;
-
-
-
-
-
-
-
 }
 
+/* === Header Bar === */
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 25px;
+}
+
+#auth-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* === Buttons === */
 button {
   background-color: #007bff;
-
-
-
-
-
-
-
-
-
   color: white;
   border: none;
   padding: 10px 16px;
@@ -35,14 +39,16 @@ button {
   cursor: pointer;
   font-size: 15px;
   margin: 5px;
+  transition: 0.2s;
 }
 
 button:hover {
   background-color: #0056b3;
 }
 
+/* === Table Styling === */
 table {
-  width: 80%;
+  width: 100%;
   border-collapse: collapse;
   background: #fff;
   margin-top: 15px;
@@ -50,7 +56,6 @@ table {
 }
 
 th, td {
-
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
@@ -66,10 +71,81 @@ tr:hover {
   cursor: pointer;
 }
 
-#userDetails {
-  margin-top: 25px;
-  padding: 15px;
+/* === Layout Container (Left: Table, Right: Details) === */
+#data-section {
+  display: flex;
+  flex-direction: row;   /* horizontal layout */
+  flex-wrap: nowrap;     /* prevent wrapping */
+  gap: 20px;
+  align-items: flex-start;
+  height: calc(100vh - 140px);
+  overflow: hidden;      /* prevent scrollbars from container */
+}
+
+/* === Left Side: User Table === */
+#table-container {
+  width: 33%;
   background: white;
+  padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  height: 100%;
+  position: sticky;
+  top: 20px;             /* fixed position when scrolling */
+}
+
+/* === Right Side: User Details === */
+#userDetails {
+  width: 67%;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* === User Details Table === */
+#userDetails table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#userDetails td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+/* === Scrollbar Styling (optional aesthetic) === */
+#table-container::-webkit-scrollbar,
+#userDetails::-webkit-scrollbar {
+  width: 8px;
+}
+
+#table-container::-webkit-scrollbar-thumb,
+#userDetails::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+#table-container::-webkit-scrollbar-thumb:hover,
+#userDetails::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* === Responsive Layout for Mobile === */
+@media (max-width: 900px) {
+  #data-section {
+    flex-direction: column;
+    height: auto;
+  }
+
+  #table-container,
+  #userDetails {
+    width: 100%;
+    height: auto;
+    position: static;
+  }
 }
