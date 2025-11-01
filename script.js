@@ -18,36 +18,40 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 🔥 Change this to match your actual data path in Realtime Database
-// e.g. "users", "clients", "DhandaData", etc.
+// Reference your data path (adjust as needed)
 const dataRef = ref(db, "users");
 
-// Listen for real-time changes
-onValue(dataRef, (snapshot) => {
-  const users = snapshot.val();
-  const container = document.getElementById("data");
+// Import 'get' instead of 'onValue'
+import { get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-  if (!users) {
-    container.innerHTML = "<p>No data found at /users</p>";
-    return;
-  }
+// Fetch data once
+get(dataRef)
+  .then((snapshot) => {
+    const users = snapshot.val();
+    const container = document.getElementById("data");
 
-  // Build an HTML table dynamically
-  let html = "<table><tr><th>ID</th><th>Name</th><th>Balance</th></tr>";
+    if (!users) {
+      container.innerHTML = "<p>No data found at /users</p>";
+      return;
+    }
 
-  Object.entries(users).forEach(([id, user]) => {
-    html += `
-      <tr>
-        <td>${id}</td>
-        <td>${user.name || "-"}</td>
-        <td>${user.balance || "-"}</td>
-      </tr>
-    `;
+    // Build an HTML table dynamically
+    let html = "<table><tr><th>ID</th><th>Name</th><th>Balance</th></tr>";
+
+    Object.entries(users).forEach(([id, user]) => {
+      html += `
+        <tr>
+          <td>${id}</td>
+          <td>${user.name || "-"}</td>
+          <td>${user.balance || "-"}</td>
+        </tr>
+      `;
+    });
+
+    html += "</table>";
+    container.innerHTML = html;
+  })
+  .catch((error) => {
+    document.getElementById("data").innerHTML =
+      "<p style='color:red;'>Error: " + error.message + "</p>";
   });
-
-  html += "</table>";
-  container.innerHTML = html;
-}, (error) => {
-  document.getElementById("data").innerHTML =
-    "<p style='color:red;'>Error: " + error.message + "</p>";
-});
