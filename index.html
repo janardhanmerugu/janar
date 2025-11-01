@@ -9,19 +9,24 @@
 <body>
   <header>
     <h1>👥 Firebase User Dashboard</h1>
-    <p class="subtitle">Realtime data from Firebase Realtime Database</p>
+    <p class="subtitle">Secure access with Google Sign-In</p>
   </header>
 
   <main>
-    <div id="loader" class="loader">Loading users...</div>
+    <div id="auth-section" class="auth-section">
+      <button id="login-btn" class="login-btn">Sign in with Google</button>
+      <button id="logout-btn" class="logout-btn" style="display:none;">Sign out</button>
+      <p id="user-info" class="user-info"></p>
+    </div>
+
+    <div id="loader" class="loader">Please sign in to view data...</div>
     <div id="data" class="data-container"></div>
   </main>
 
   <footer>
-    <p>© 2025 Firebase Demo | Built with ❤️ by Dhanda book</p>
+    <p>© 2025 Firebase Demo | Built with ❤️ by Janardhan</p>
   </footer>
 
-  <!-- Firebase logic -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
