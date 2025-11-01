@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// ✅ Your Firebase configuration
+// ✅ Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCmaZ_ojXb5Xkg9b5pu4ng0WaNzw42BEwc",
   authDomain: "dhanda-c6f81.firebaseapp.com",
@@ -18,40 +18,49 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Reference your data path (adjust as needed)
-const dataRef = ref(db, "users");
+// HTML elements
+const loader = document.getElementById("loader");
+const dataContainer = document.getElementById("data");
 
-// Import 'get' instead of 'onValue'
-import { get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+// Realtime listener for /users
+const usersRef = ref(db, "users");
 
-// Fetch data once
-get(dataRef)
-  .then((snapshot) => {
-    const users = snapshot.val();
-    const container = document.getElementById("data");
+// 🔄 Listen for live data updates
+onValue(usersRef, (snapshot) => {
+  const users = snapshot.val();
 
-    if (!users) {
-      container.innerHTML = "<p>No data found at /users</p>";
-      return;
-    }
+  if (!users) {
+    loader.textContent = "No user data found.";
+    return;
+  }
 
-    // Build an HTML table dynamically
-    let html = "<table><tr><th>ID</th><th>Name</th><th>Balance</th></tr>";
+  loader.style.display = "none";
 
-    Object.entries(users).forEach(([id, user]) => {
-      html += `
+  // Build dynamic table
+  let html = `
+    <table>
+      <thead>
         <tr>
-          <td>${id}</td>
-          <td>${user.name || "-"}</td>
-          <td>${user.balance || "-"}</td>
+          <th>User ID</th>
+          <th>Name</th>
+          <th>Balance</th>
         </tr>
-      `;
-    });
+      </thead>
+      <tbody>
+  `;
 
-    html += "</table>";
-    container.innerHTML = html;
-  })
-  .catch((error) => {
-    document.getElementById("data").innerHTML =
-      "<p style='color:red;'>Error: " + error.message + "</p>";
+  Object.entries(users).forEach(([id, user]) => {
+    html += `
+      <tr>
+        <td>${id}</td>
+        <td>${user.name || "-"}</td>
+        <td>${user.balance !== undefined ? user.balance : "-"}</td>
+      </tr>
+    `;
   });
+
+  html += "</tbody></table>";
+  dataContainer.innerHTML = html;
+}, (error) => {
+  loader.textContent = "❌ Error loading data: " + error.message;
+});
