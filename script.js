@@ -1,19 +1,9 @@
-// Import Firebase SDK modules
+// Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getDatabase,
-  ref,
-  get
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// ✅ Firebase configuration
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyCmaZ_ojXb5Xkg9b5pu4ng0WaNzw42BEwc",
   authDomain: "dhanda-c6f81.firebaseapp.com",
@@ -31,6 +21,7 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+// DOM Elements
 const loginBtn = document.getElementById("loginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 const userInfo = document.getElementById("userInfo");
@@ -38,26 +29,22 @@ const dataSection = document.getElementById("data-section");
 const tableContainer = document.getElementById("table-container");
 const userDetailsDiv = document.getElementById("userDetails");
 
-// 🔹 Sign In with Google
+// Login with Google
 loginBtn.addEventListener("click", () => {
-  signInWithPopup(auth, provider).catch(err => {
-    alert("Login failed: " + err.message);
-  });
+  signInWithPopup(auth, provider).catch(err => alert("Login failed: " + err.message));
 });
 
-// 🔹 Sign Out
-logoutBtn.addEventListener("click", () => {
-  signOut(auth);
-});
+// Logout
+logoutBtn.addEventListener("click", () => signOut(auth));
 
-// 🔹 Track login state
+// Track auth state
 onAuthStateChanged(auth, user => {
   if (user) {
     userInfo.textContent = `Signed in as ${user.displayName}`;
     loginBtn.style.display = "none";
     logoutBtn.style.display = "inline-block";
-    dataSection.style.display = "block";
-    loadUsers(); // Load users only after login
+    dataSection.style.display = "flex";
+    loadUsers();
   } else {
     userInfo.textContent = "";
     loginBtn.style.display = "inline-block";
@@ -66,7 +53,7 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-// 🔹 Load all users (from /users)
+// Load all users
 async function loadUsers() {
   tableContainer.innerHTML = "Loading...";
   userDetailsDiv.innerHTML = "";
@@ -74,92 +61,61 @@ async function loadUsers() {
   try {
     const snapshot = await get(ref(db, "users"));
     const users = snapshot.val();
+    if (!users) return tableContainer.innerHTML = "<p>No users found.</p>";
 
-    if (!users) {
-      tableContainer.innerHTML = "<p>No users found.</p>";
-      return;
-    }
+    let html = `<table>
+                  <thead>
+                    <tr><th>User ID</th><th>Username</th></tr>
+                  </thead>
+                  <tbody>`;
 
-    let html = `
-      <table>
-        <thead>
-          <tr>
-            <th>User ID</th>
-            <th>Username</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
-
-    // Loop through each user
     Object.entries(users).forEach(([userId, userData]) => {
-      let username = "(No username)";
-
-      if (userData.profile) {
-        // Get the first child under profile
-        const profileEntries = Object.entries(userData.profile);
-        if (profileEntries.length > 0) {
-          const [, profileData] = profileEntries[0];
-          username = profileData.username || "(No username)";
-        }
-      }
-
-      html += `
-        <tr data-user="${userId}">
-          <td>${userId}</td>
-          <td>${username}</td>
-        </tr>
-      `;
+      const profile = userData.profile ? Object.values(userData.profile)[0] : null;
+      const username = profile?.username || "(No username)";
+      html += `<tr data-user="${userId}"><td>${userId}</td><td>${username}</td></tr>`;
     });
 
-    html += `</tbody></table>`;
+    html += "</tbody></table>";
     tableContainer.innerHTML = html;
 
-    // Add click listeners
-    document.querySelectorAll("tr[data-user]").forEach(row => {
-      row.addEventListener("click", () => {
-        const userId = row.getAttribute("data-user");
-        loadUserDetails(userId);
-      });
+    // Add click listeners to table rows
+    document.querySelectorAll("tbody tr[data-user]").forEach(row => {
+      row.addEventListener("click", () => loadUserDetails(row.dataset.user));
     });
+
   } catch (error) {
+    console.error("Firebase error:", error);
     tableContainer.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
 }
 
-// 🔹 Load clicked user details (all data under that user)
+// Load clicked user details
 async function loadUserDetails(userId) {
+  userDetailsDiv.innerHTML = "Loading...";
+
   try {
     const snapshot = await get(ref(db, `users/${userId}`));
     const user = snapshot.val();
+    if (!user) return userDetailsDiv.innerHTML = `<p>No data found for ${userId}</p>`;
 
-    if (!user) {
-      userDetailsDiv.innerHTML = `<p>No data found for ${userId}</p>`;
-      return;
-    }
+    let html = `<h3>Details for ${userId}</h3>`;
 
-    let detailsHtml = `<h3>Details for ${userId}</h3>`;
-
-    // Loop through all main sections (client, buy, sell, profile, etc.)
-    for (const [section, content] of Object.entries(user)) {
-      detailsHtml += `<h4>${section}</h4><table>`;
+    Object.entries(user).forEach(([section, content]) => {
+      html += `<h4>${section}</h4><table>`;
       if (typeof content === "object") {
         Object.entries(content).forEach(([key, value]) => {
-          if (typeof value === "object") {
-            detailsHtml += `<tr><td><strong>${key}</strong></td><td>${JSON.stringify(value, null, 2)}</td></tr>`;
-          } else {
-            detailsHtml += `<tr><td><strong>${key}</strong></td><td>${value}</td></tr>`;
-          }
+          html += `<tr><td><strong>${key}</strong></td><td>${typeof value === "object" ? JSON.stringify(value, null, 2) : value}</td></tr>`;
         });
       } else {
-        detailsHtml += `<tr><td colspan="2">${content}</td></tr>`;
+        html += `<tr><td colspan="2">${content}</td></tr>`;
       }
-      detailsHtml += `</table>`;
-    }
+      html += `</table>`;
+    });
 
-    userDetailsDiv.innerHTML = detailsHtml;
+    userDetailsDiv.innerHTML = html;
+
   } catch (error) {
+    console.error("Firebase error:", error);
     userDetailsDiv.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
 }
-
