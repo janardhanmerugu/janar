@@ -93,14 +93,15 @@ async function loadUsers() {
     `;
 
     Object.entries(users).forEach(([id, user]) => {
-      html += `
-        <tr data-user="${id}">
-          <td>${id}</td>
-          <td>${user.name || "-"}</td>
-          <td>${user.balance || "-"}</td>
-        </tr>
-      `;
-    });
+  html += `
+    <tr data-user="${id}">
+      <td>${id}</td>
+      <td>${user.name || "-"}</td>
+      <td>${user.balance || "-"}</td>
+    </tr>
+  `;
+});
+
 
     html += `</tbody></table>`;
     tableContainer.innerHTML = html;
