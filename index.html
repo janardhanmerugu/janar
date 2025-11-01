@@ -3,25 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Firebase User Dashboard</title>
+  <title>Firebase Users Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+  <!-- Header -->
   <div class="header-bar">
-  <h1>Firebase User Dashboard</h1>
-
-  <div id="auth-section">
-    <button id="loginBtn">🔑 Sign in with Google</button>
-    <button id="logoutBtn" style="display:none;">🚪 Logout</button>
-    <p id="userInfo"></p>
+    <h1>Users Dashboard</h1>
+    <div id="auth-section">
+      <span id="userInfo"></span>
+      <button id="loginBtn">Login with Google</button>
+      <button id="logoutBtn" style="display:none;">Logout</button>
+    </div>
   </div>
-</div>
 
+  <!-- Main content -->
   <div id="data-section" style="display:none;">
-    <h2>All Users</h2>
-    <div id="table-container">Loading...</div>
-
+    <div id="table-container"></div>
     <div id="userDetails"></div>
   </div>
 
