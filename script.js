@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// ✅ Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCmaZ_ojXb5Xkg9b5pu4ng0WaNzw42BEwc",
   authDomain: "dhanda-c6f81.firebaseapp.com",
@@ -18,13 +18,36 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Reference your data path (e.g., /users or /sensor)
-const dataRef = ref(db, "/users");
+// 🔥 Change this to match your actual data path in Realtime Database
+// e.g. "users", "clients", "DhandaData", etc.
+const dataRef = ref(db, "users");
 
-// Listen for changes
+// Listen for real-time changes
 onValue(dataRef, (snapshot) => {
-  const data = snapshot.val();
-  document.getElementById("data").textContent = JSON.stringify(data, null, 2);
+  const users = snapshot.val();
+  const container = document.getElementById("data");
+
+  if (!users) {
+    container.innerHTML = "<p>No data found at /users</p>";
+    return;
+  }
+
+  // Build an HTML table dynamically
+  let html = "<table><tr><th>ID</th><th>Name</th><th>Balance</th></tr>";
+
+  Object.entries(users).forEach(([id, user]) => {
+    html += `
+      <tr>
+        <td>${id}</td>
+        <td>${user.name || "-"}</td>
+        <td>${user.balance || "-"}</td>
+      </tr>
+    `;
+  });
+
+  html += "</table>";
+  container.innerHTML = html;
+}, (error) => {
+  document.getElementById("data").innerHTML =
+    "<p style='color:red;'>Error: " + error.message + "</p>";
 });
-
-
