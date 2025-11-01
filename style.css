@@ -10,7 +10,7 @@ h1 {
   color: #007bff;
 }
 
-/* Align title and buttons horizontally in a header bar */
+/* === Header Bar === */
 .header-bar {
   display: flex;
   align-items: center;
@@ -22,14 +22,13 @@ h1 {
   margin-bottom: 25px;
 }
 
-/* Make auth section inline inside header */
 #auth-section {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-
+/* === Buttons === */
 button {
   background-color: #007bff;
   color: white;
@@ -45,8 +44,9 @@ button:hover {
   background-color: #0056b3;
 }
 
+/* === Table === */
 table {
-  width: 80%;
+  width: 100%;
   border-collapse: collapse;
   background: #fff;
   margin-top: 15px;
@@ -69,10 +69,57 @@ tr:hover {
   cursor: pointer;
 }
 
-#userDetails {
-  margin-top: 25px;
-  padding: 15px;
+/* === Layout Container (Left: Table, Right: Details) === */
+#data-section {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  height: calc(100vh - 140px);
+}
+
+/* === Left Side: User Table === */
+#table-container {
+  flex: 1;
   background: white;
+  padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* === Right Side: User Details === */
+#userDetails {
+  flex: 2;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* === User Details Table === */
+#userDetails table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#userDetails td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+/* === Responsive Layout for Mobile === */
+@media (max-width: 900px) {
+  #data-section {
+    flex-direction: column;
+    height: auto;
+  }
+
+  #table-container,
+  #userDetails {
+    width: 100%;
+    height: auto;
+  }
 }
