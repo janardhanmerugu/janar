@@ -91,9 +91,19 @@ async function loadUsers() {
         <tbody>
     `;
 
-    // Loop through user IDs
+    // Loop through each user
     Object.entries(users).forEach(([userId, userData]) => {
-      const username = userData?.profile?.username || "(No username)";
+      let username = "(No username)";
+
+      if (userData.profile) {
+        // Get the first child under profile
+        const profileEntries = Object.entries(userData.profile);
+        if (profileEntries.length > 0) {
+          const [, profileData] = profileEntries[0];
+          username = profileData.username || "(No username)";
+        }
+      }
+
       html += `
         <tr data-user="${userId}">
           <td>${userId}</td>
@@ -105,7 +115,7 @@ async function loadUsers() {
     html += `</tbody></table>`;
     tableContainer.innerHTML = html;
 
-    // Add click listener for each row
+    // Add click listeners
     document.querySelectorAll("tr[data-user]").forEach(row => {
       row.addEventListener("click", () => {
         const userId = row.getAttribute("data-user");
@@ -117,7 +127,7 @@ async function loadUsers() {
   }
 }
 
-// 🔹 Load details of selected user
+// 🔹 Load clicked user details (all data under that user)
 async function loadUserDetails(userId) {
   try {
     const snapshot = await get(ref(db, `users/${userId}`));
@@ -130,12 +140,16 @@ async function loadUserDetails(userId) {
 
     let detailsHtml = `<h3>Details for ${userId}</h3>`;
 
-    // Show all main child nodes
+    // Loop through all main sections (client, buy, sell, profile, etc.)
     for (const [section, content] of Object.entries(user)) {
       detailsHtml += `<h4>${section}</h4><table>`;
       if (typeof content === "object") {
         Object.entries(content).forEach(([key, value]) => {
-          detailsHtml += `<tr><td><strong>${key}</strong></td><td>${JSON.stringify(value)}</td></tr>`;
+          if (typeof value === "object") {
+            detailsHtml += `<tr><td><strong>${key}</strong></td><td>${JSON.stringify(value, null, 2)}</td></tr>`;
+          } else {
+            detailsHtml += `<tr><td><strong>${key}</strong></td><td>${value}</td></tr>`;
+          }
         });
       } else {
         detailsHtml += `<tr><td colspan="2">${content}</td></tr>`;
@@ -148,3 +162,4 @@ async function loadUserDetails(userId) {
     userDetailsDiv.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
 }
+
