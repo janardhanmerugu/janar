@@ -1,37 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Dhanda Live Firebase Data</title>
-  <script type="module" src="script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Firebase Auth + Live Data</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
-    }
-    h1 {
+      margin: 2rem;
+      background: #f5f5f5;
       color: #333;
     }
-    table {
-      border-collapse: collapse;
-      width: 100%;
+    pre {
       background: white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
+    button {
+      padding: 10px 20px;
       background: #007bff;
       color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
     }
+    button:hover { background: #0056b3; }
   </style>
 </head>
 <body>
-  <h1>🔥 Dhanda Realtime Users Data</h1>
-  <div id="data">Loading...</div>
+
+  <h1>Realtime Firebase Data Viewer 🔥</h1>
+
+  <div id="login-section">
+    <button id="login-btn">Sign in with Google</button>
+  </div>
+
+  <div id="data-section" style="display:none;">
+    <button id="logout-btn">Logout</button>
+    <h3>Live Data:</h3>
+    <pre id="data">Loading...</pre>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    // 🔥 Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCmaZ_ojXb5Xkg9b5pu4ng0WaNzw42BEwc",
+      authDomain: "dhanda-c6f81.firebaseapp.com",
+      databaseURL: "https://dhanda-c6f81-default-rtdb.firebaseio.com",
+      projectId: "dhanda-c6f81",
+      storageBucket: "dhanda-c6f81.firebasestorage.app",
+      messagingSenderId: "1078087902179",
+      appId: "1:1078087902179:web:7291c62f89528e732176d6",
+      measurementId: "G-QG764Y58JM"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    const loginSection = document.getElementById("login-section");
+    const dataSection = document.getElementById("data-section");
+    const dataPre = document.getElementById("data");
+
+    // Login with Google
+    loginBtn.addEventListener("click", async () => {
+      await signInWithPopup(auth, provider);
+    });
+
+    // Logout
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth);
+    });
+
+    // Auth state listener
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loginSection.style.display = "none";
+        dataSection.style.display = "block";
+
+        // Reference your data path
+        const dataRef = ref(db, "users");
+
+        // Listen for live updates
+        onValue(dataRef, (snapshot) => {
+          const data = snapshot.val();
+          dataPre.textContent = JSON.stringify(data, null, 2);
+        });
+
+      } else {
+        loginSection.style.display = "block";
+        dataSection.style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>
