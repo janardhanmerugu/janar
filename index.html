@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Firebase Users Viewer</title>
+  <title>Firebase User Viewer</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
     .user-btn { padding: 10px 15px; margin: 5px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; }
@@ -21,7 +21,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
   // 🔥 Firebase config
   const firebaseConfig = {
@@ -41,37 +41,45 @@
   const userListDiv = document.getElementById("user-list");
   const userDetailsDiv = document.getElementById("user-details");
 
-  const usersRef = ref(db, "users");
-
-  // Fetch all users once
-  get(usersRef).then(snapshot => {
+  // First, fetch all user IDs (keys) only
+  get(ref(db, "users")).then(snapshot => {
     const users = snapshot.val();
     if (!users) {
       userListDiv.innerHTML = "No users found.";
       return;
     }
 
-    // Show clickable user buttons
     userListDiv.innerHTML = "";
     Object.keys(users).forEach(userId => {
       const btn = document.createElement("button");
       btn.className = "user-btn";
       btn.textContent = userId;
-      btn.addEventListener("click", () => showUser(userId, users[userId]));
+      btn.addEventListener("click", () => fetchUser(userId));
       userListDiv.appendChild(btn);
     });
   });
 
-  // Show user details when clicked
-  function showUser(userId, userData) {
-    userDetailsDiv.innerHTML = `
-      <h2>Details for ${userId}</h2>
-      <table>
-        <tr><th>Field</th><th>Value</th></tr>
-        <tr><td>Name</td><td>${userData.name}</td></tr>
-        <tr><td>Balance</td><td>${userData.balance}</td></tr>
-      </table>
-    `;
+  // Fetch individual user data on demand
+  function fetchUser(userId) {
+    const userRef = ref(db, `users/${userId}`);
+    get(userRef).then(snapshot => {
+      const userData = snapshot.val();
+      if (!userData) {
+        userDetailsDiv.innerHTML = `<p>No data found for ${userId}</p>`;
+        return;
+      }
+
+      userDetailsDiv.innerHTML = `
+        <h2>Details for ${userId}</h2>
+        <table>
+          <tr><th>Field</th><th>Value</th></tr>
+          <tr><td>Name</td><td>${userData.name || "-"}</td></tr>
+          <tr><td>Balance</td><td>${userData.balance || "-"}</td></tr>
+        </table>
+      `;
+    }).catch(err => {
+      userDetailsDiv.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+    });
   }
 </script>
 </body>
