@@ -66,7 +66,7 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-// 🔹 Load all users in a table
+// 🔹 Load all users (from /users)
 async function loadUsers() {
   tableContainer.innerHTML = "Loading...";
   userDetailsDiv.innerHTML = "";
@@ -85,23 +85,22 @@ async function loadUsers() {
         <thead>
           <tr>
             <th>User ID</th>
-            <th>Name</th>
-            <th>Balance</th>
+            <th>Username</th>
           </tr>
         </thead>
         <tbody>
     `;
 
-    Object.entries(users).forEach(([id, user]) => {
-  html += `
-    <tr data-user="${id}">
-      <td>${id}</td>
-      <td>${user.name || "-"}</td>
-      <td>${user.balance || "-"}</td>
-    </tr>
-  `;
-});
-
+    // Loop through user IDs
+    Object.entries(users).forEach(([userId, userData]) => {
+      const username = userData?.profile?.username || "(No username)";
+      html += `
+        <tr data-user="${userId}">
+          <td>${userId}</td>
+          <td>${username}</td>
+        </tr>
+      `;
+    });
 
     html += `</tbody></table>`;
     tableContainer.innerHTML = html;
@@ -118,22 +117,31 @@ async function loadUsers() {
   }
 }
 
-// 🔹 Load clicked user details
-async function loadUserDetails(uid) {
+// 🔹 Load details of selected user
+async function loadUserDetails(userId) {
   try {
-    const snapshot = await get(ref(db, `users/${uid}`));
-    const data = snapshot.val();
+    const snapshot = await get(ref(db, `users/${userId}`));
+    const user = snapshot.val();
 
-    if (!data) {
-      userDetailsDiv.innerHTML = `<p>No data found for ${uid}</p>`;
+    if (!user) {
+      userDetailsDiv.innerHTML = `<p>No data found for ${userId}</p>`;
       return;
     }
 
-    let detailsHtml = `<h3>Details for ${uid}</h3><table>`;
-    Object.entries(data).forEach(([key, value]) => {
-      detailsHtml += `<tr><td><strong>${key}</strong></td><td>${value}</td></tr>`;
-    });
-    detailsHtml += `</table>`;
+    let detailsHtml = `<h3>Details for ${userId}</h3>`;
+
+    // Show all main child nodes
+    for (const [section, content] of Object.entries(user)) {
+      detailsHtml += `<h4>${section}</h4><table>`;
+      if (typeof content === "object") {
+        Object.entries(content).forEach(([key, value]) => {
+          detailsHtml += `<tr><td><strong>${key}</strong></td><td>${JSON.stringify(value)}</td></tr>`;
+        });
+      } else {
+        detailsHtml += `<tr><td colspan="2">${content}</td></tr>`;
+      }
+      detailsHtml += `</table>`;
+    }
 
     userDetailsDiv.innerHTML = detailsHtml;
   } catch (error) {
