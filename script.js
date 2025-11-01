@@ -19,11 +19,12 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // Reference your data path (e.g., /users or /sensor)
-const dataRef = ref(db, "yourDataPath");
+const dataRef = ref(db, "/users");
 
 // Listen for changes
 onValue(dataRef, (snapshot) => {
   const data = snapshot.val();
   document.getElementById("data").textContent = JSON.stringify(data, null, 2);
 });
+
 
