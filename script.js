@@ -72,15 +72,22 @@ async function loadUsers() {
     Object.entries(users).forEach(([userId, userData]) => {
       const profile = userData.profile ? Object.values(userData.profile)[0] : null;
       const username = profile?.username || "(No username)";
-      html += `<tr data-user="${userId}"><td>${userId}</td><td>${username}</td></tr>`;
+
+      html += `<tr data-user="${userId}" data-username="${username}">
+                 <td>${userId}</td><td>${username}</td>
+               </tr>`;
     });
 
     html += "</tbody></table>";
     tableContainer.innerHTML = html;
 
-    // Add click listeners to table rows
+    // Add click listeners
     document.querySelectorAll("tbody tr[data-user]").forEach(row => {
-      row.addEventListener("click", () => loadUserDetails(row.dataset.user,username));
+      row.addEventListener("click", () => {
+        const userId = row.dataset.user;
+        const username = row.dataset.username;
+        loadUserDetails(userId, username);
+      });
     });
 
   } catch (error) {
@@ -90,13 +97,13 @@ async function loadUsers() {
 }
 
 // Load clicked user details
-async function loadUserDetails(userId,username) {
+async function loadUserDetails(userId, username) {
   userDetailsDiv.innerHTML = "Loading...";
 
   try {
     const snapshot = await get(ref(db, `users/${userId}`));
     const user = snapshot.val();
-    if (!user) return userDetailsDiv.innerHTML = `<p>No data found for ${userId}</p>`;
+    if (!user) return userDetailsDiv.innerHTML = `<p>No data found for ${username}</p>`;
 
     let html = `<h3>Details for ${username}</h3>`;
 
@@ -119,4 +126,3 @@ async function loadUserDetails(userId,username) {
     userDetailsDiv.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
 }
-
