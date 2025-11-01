@@ -3,14 +3,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import {
   getDatabase,
   ref,
-  get,
+  get
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
-  onAuthStateChanged,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 // ✅ Firebase configuration
@@ -35,7 +35,7 @@ const loginBtn = document.getElementById("loginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 const userInfo = document.getElementById("userInfo");
 const dataSection = document.getElementById("data-section");
-const userListDiv = document.getElementById("userList");
+const tableContainer = document.getElementById("table-container");
 const userDetailsDiv = document.getElementById("userDetails");
 
 // 🔹 Sign In with Google
@@ -66,9 +66,9 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-// 🔹 Load all users
+// 🔹 Load all users in a table
 async function loadUsers() {
-  userListDiv.innerHTML = "Loading...";
+  tableContainer.innerHTML = "Loading...";
   userDetailsDiv.innerHTML = "";
 
   try {
@@ -76,24 +76,48 @@ async function loadUsers() {
     const users = snapshot.val();
 
     if (!users) {
-      userListDiv.innerHTML = "<p>No users found.</p>";
+      tableContainer.innerHTML = "<p>No users found.</p>";
       return;
     }
 
-    userListDiv.innerHTML = "";
-    Object.keys(users).forEach(uid => {
-      const btn = document.createElement("button");
-      btn.className = "user-btn";
-      btn.textContent = uid;
-      btn.addEventListener("click", () => loadUserDetails(uid));
-      userListDiv.appendChild(btn);
+    let html = `
+      <table>
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    Object.entries(users).forEach(([id, user]) => {
+      html += `
+        <tr data-user="${id}">
+          <td>${id}</td>
+          <td>${user.name || "-"}</td>
+          <td>${user.balance || "-"}</td>
+        </tr>
+      `;
+    });
+
+    html += `</tbody></table>`;
+    tableContainer.innerHTML = html;
+
+    // Add click listener for each row
+    document.querySelectorAll("tr[data-user]").forEach(row => {
+      row.addEventListener("click", () => {
+        const userId = row.getAttribute("data-user");
+        loadUserDetails(userId);
+      });
     });
   } catch (error) {
-    userListDiv.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
+    tableContainer.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
 }
 
-// 🔹 Load one user's details
+// 🔹 Load clicked user details
 async function loadUserDetails(uid) {
   try {
     const snapshot = await get(ref(db, `users/${uid}`));
@@ -104,14 +128,13 @@ async function loadUserDetails(uid) {
       return;
     }
 
-    userDetailsDiv.innerHTML = `
-      <h3>Details for ${uid}</h3>
-      <table>
-        <tr><th>Field</th><th>Value</th></tr>
-        <tr><td>Name</td><td>${data.name || "-"}</td></tr>
-        <tr><td>Balance</td><td>${data.balance || "-"}</td></tr>
-      </table>
-    `;
+    let detailsHtml = `<h3>Details for ${uid}</h3><table>`;
+    Object.entries(data).forEach(([key, value]) => {
+      detailsHtml += `<tr><td><strong>${key}</strong></td><td>${value}</td></tr>`;
+    });
+    detailsHtml += `</table>`;
+
+    userDetailsDiv.innerHTML = detailsHtml;
   } catch (error) {
     userDetailsDiv.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
