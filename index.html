@@ -1,86 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Firebase User Viewer</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    .user-btn { padding: 10px 15px; margin: 5px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; }
-    .user-btn:hover { background: #0056b3; }
-    table { border-collapse: collapse; width: 50%; margin-top: 20px; background: white; }
-    th, td { border: 1px solid #ddd; padding: 8px; }
-    th { background: #007bff; color: white; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Firebase User Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header>
+    <h1>👥 Firebase User Dashboard</h1>
+    <p class="subtitle">Realtime data from Firebase Realtime Database</p>
+  </header>
 
-<h1>Users</h1>
-<div id="user-list">Loading users...</div>
+  <main>
+    <div id="loader" class="loader">Loading users...</div>
+    <div id="data" class="data-container"></div>
+  </main>
 
-<div id="user-details"></div>
+  <footer>
+    <p>© 2025 Firebase Demo | Built with ❤️ by Dhanda book</p>
+  </footer>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-  // 🔥 Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyCmaZ_ojXb5Xkg9b5pu4ng0WaNzw42BEwc",
-    authDomain: "dhanda-c6f81.firebaseapp.com",
-    databaseURL: "https://dhanda-c6f81-default-rtdb.firebaseio.com",
-    projectId: "dhanda-c6f81",
-    storageBucket: "dhanda-c6f81.firebasestorage.app",
-    messagingSenderId: "1078087902179",
-    appId: "1:1078087902179:web:7291c62f89528e732176d6",
-    measurementId: "G-QG764Y58JM"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  const userListDiv = document.getElementById("user-list");
-  const userDetailsDiv = document.getElementById("user-details");
-
-  // First, fetch all user IDs (keys) only
-  get(ref(db, "users")).then(snapshot => {
-    const users = snapshot.val();
-    if (!users) {
-      userListDiv.innerHTML = "No users found.";
-      return;
-    }
-
-    userListDiv.innerHTML = "";
-    Object.keys(users).forEach(userId => {
-      const btn = document.createElement("button");
-      btn.className = "user-btn";
-      btn.textContent = userId;
-      btn.addEventListener("click", () => fetchUser(userId));
-      userListDiv.appendChild(btn);
-    });
-  });
-
-  // Fetch individual user data on demand
-  function fetchUser(userId) {
-    const userRef = ref(db, `users/${userId}`);
-    get(userRef).then(snapshot => {
-      const userData = snapshot.val();
-      if (!userData) {
-        userDetailsDiv.innerHTML = `<p>No data found for ${userId}</p>`;
-        return;
-      }
-
-      userDetailsDiv.innerHTML = `
-        <h2>Details for ${userId}</h2>
-        <table>
-          <tr><th>Field</th><th>Value</th></tr>
-          <tr><td>Name</td><td>${userData.name || "-"}</td></tr>
-          <tr><td>Balance</td><td>${userData.balance || "-"}</td></tr>
-        </table>
-      `;
-    }).catch(err => {
-      userDetailsDiv.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
-    });
-  }
-</script>
+  <!-- Firebase logic -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
