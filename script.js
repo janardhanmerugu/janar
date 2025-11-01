@@ -80,7 +80,7 @@ async function loadUsers() {
 
     // Add click listeners to table rows
     document.querySelectorAll("tbody tr[data-user]").forEach(row => {
-      row.addEventListener("click", () => loadUserDetails(row.dataset.user));
+      row.addEventListener("click", () => loadUserDetails(row.dataset.user,username));
     });
 
   } catch (error) {
@@ -90,7 +90,7 @@ async function loadUsers() {
 }
 
 // Load clicked user details
-async function loadUserDetails(userId) {
+async function loadUserDetails(userId,username) {
   userDetailsDiv.innerHTML = "Loading...";
 
   try {
@@ -98,7 +98,7 @@ async function loadUserDetails(userId) {
     const user = snapshot.val();
     if (!user) return userDetailsDiv.innerHTML = `<p>No data found for ${userId}</p>`;
 
-    let html = `<h3>Details for ${userId}</h3>`;
+    let html = `<h3>Details for ${username}</h3>`;
 
     Object.entries(user).forEach(([section, content]) => {
       html += `<h4>${section}</h4><table>`;
@@ -119,3 +119,4 @@ async function loadUserDetails(userId) {
     userDetailsDiv.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
 }
+
