@@ -2,16 +2,36 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>My Firebase Live Data</title>
+  <title>Dhanda Live Firebase Data</title>
   <script type="module" src="script.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    h1 { color: #333; }
-    #data { background: white; padding: 10px; border-radius: 8px; box-shadow: 0 0 5px #ccc; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #007bff;
+      color: white;
+    }
   </style>
 </head>
 <body>
-  <h1>🔥 Real-time Firebase Data</h1>
-  <pre id="data">Loading...</pre>
+  <h1>🔥 Dhanda Realtime Users Data</h1>
+  <div id="data">Loading...</div>
 </body>
 </html>
