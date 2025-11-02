@@ -96,7 +96,7 @@ async function loadUsers() {
   }
 }
 
-// Load clicked user details in card layout
+// Load clicked user details in card layout (HORIZONTAL)
 async function loadUserDetails(userId, username) {
   userDetailsDiv.innerHTML = "Loading...";
 
@@ -132,25 +132,31 @@ async function loadUserDetails(userId, username) {
           padding-bottom: 8px;
           border-bottom: 2px solid #007bff;
         }
-        .card-row {
+        .card-content {
           display: flex;
-          justify-content: space-between;
-          padding: 8px 0;
-          border-bottom: 1px solid #f0f0f0;
+          flex-wrap: wrap;
+          gap: 16px;
         }
-        .card-row:last-child {
-          border-bottom: none;
+        .card-field {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          min-width: 150px;
+          flex: 1;
         }
         .card-label {
           font-weight: 600;
           color: #555;
           text-transform: capitalize;
+          font-size: 14px;
         }
         .card-value {
           color: #333;
-          text-align: right;
           word-break: break-word;
-          max-width: 60%;
+          padding: 8px;
+          background: #f8f9fa;
+          border-radius: 4px;
+          font-size: 14px;
         }
         .status-true {
           color: #28a745;
@@ -168,6 +174,7 @@ async function loadUserDetails(userId, username) {
     Object.entries(user).forEach(([itemId, content]) => {
       html += `<div class="card-item">`;
       html += `<div class="card-header">${itemId}</div>`;
+      html += `<div class="card-content">`;
       
       if (typeof content === "object" && content !== null) {
         Object.entries(content).forEach(([key, value]) => {
@@ -186,17 +193,18 @@ async function loadUserDetails(userId, username) {
           }
           
           html += `
-            <div class="card-row">
-              <span class="card-label">${key}:</span>
+            <div class="card-field">
+              <span class="card-label">${key}</span>
               <span class="card-value ${valueClass}">${displayValue}</span>
             </div>
           `;
         });
       } else {
-        html += `<div class="card-row"><span class="card-value">${content}</span></div>`;
+        html += `<div class="card-field"><span class="card-value">${content}</span></div>`;
       }
       
-      html += `</div>`;
+      html += `</div>`; // Close card-content
+      html += `</div>`; // Close card-item
     });
 
     html += `</div>`;
