@@ -109,9 +109,11 @@ async function loadUserDetails(userId, username) {
       <style>
         .recycler-container {
           display: flex;
-          flex-direction: column;
+          flex-direction: row;
           gap: 16px;
           padding: 16px;
+          overflow-x: auto;
+          flex-wrap: wrap;
         }
         .card-item {
           background: #fff;
@@ -120,6 +122,9 @@ async function loadUserDetails(userId, username) {
           padding: 16px;
           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
           transition: box-shadow 0.3s ease;
+          min-width: 280px;
+          max-width: 320px;
+          flex: 0 0 auto;
         }
         .card-item:hover {
           box-shadow: 0 4px 8px rgba(0,0,0,0.15);
