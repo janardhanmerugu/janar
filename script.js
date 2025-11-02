@@ -108,16 +108,16 @@ async function loadUserDetails(userId, username) {
     let html = `<h3>Details for ${username}</h3>`;
 
     Object.entries(user).forEach(([section, content]) => {
-     
+      html += `<table><thead><tr><th colspan="2">${section}</th></tr></thead><tbody>`;
+      
       if (typeof content === "object") {
         Object.entries(content).forEach(([key, value]) => {
-          }
           html += `<tr><td><strong>${key}</strong></td><td>${typeof value === "object" ? JSON.stringify(value, null, 2) : value}</td></tr>`;
         });
       } else {
         html += `<tr><td colspan="2">${content}</td></tr>`;
       }
-      html += `</table>`;
+      html += `</tbody></table>`;
     });
 
     userDetailsDiv.innerHTML = html;
@@ -127,7 +127,3 @@ async function loadUserDetails(userId, username) {
     userDetailsDiv.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
 }
-
-
-
-
