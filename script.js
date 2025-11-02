@@ -96,7 +96,7 @@ async function loadUsers() {
   }
 }
 
-// Load clicked user details
+// Load clicked user details in card layout
 async function loadUserDetails(userId, username) {
   userDetailsDiv.innerHTML = "Loading...";
 
@@ -105,21 +105,101 @@ async function loadUserDetails(userId, username) {
     const user = snapshot.val();
     if (!user) return userDetailsDiv.innerHTML = `<p>No data found for ${username}</p>`;
 
-    let html = `<h3>Details for ${username}</h3>`;
+    let html = `
+      <style>
+        .recycler-container {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          padding: 16px;
+        }
+        .card-item {
+          background: #fff;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 16px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          transition: box-shadow 0.3s ease;
+        }
+        .card-item:hover {
+          box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .card-header {
+          font-size: 18px;
+          font-weight: bold;
+          color: #333;
+          margin-bottom: 12px;
+          padding-bottom: 8px;
+          border-bottom: 2px solid #007bff;
+        }
+        .card-row {
+          display: flex;
+          justify-content: space-between;
+          padding: 8px 0;
+          border-bottom: 1px solid #f0f0f0;
+        }
+        .card-row:last-child {
+          border-bottom: none;
+        }
+        .card-label {
+          font-weight: 600;
+          color: #555;
+          text-transform: capitalize;
+        }
+        .card-value {
+          color: #333;
+          text-align: right;
+          word-break: break-word;
+          max-width: 60%;
+        }
+        .status-true {
+          color: #28a745;
+          font-weight: bold;
+        }
+        .status-false {
+          color: #dc3545;
+          font-weight: bold;
+        }
+      </style>
+      <h3>Details for ${username}</h3>
+      <div class="recycler-container">
+    `;
 
-    Object.entries(user).forEach(([section, content]) => {
-      html += `<table><thead><tr><th colspan="2">${section}</th></tr></thead><tbody>`;
+    Object.entries(user).forEach(([itemId, content]) => {
+      html += `<div class="card-item">`;
+      html += `<div class="card-header">${itemId}</div>`;
       
-      if (typeof content === "object") {
+      if (typeof content === "object" && content !== null) {
         Object.entries(content).forEach(([key, value]) => {
-          html += `<tr><td><strong>${key}</strong></td><td>${typeof value === "object" ? JSON.stringify(value, null, 2) : value}</td></tr>`;
+          let displayValue = value;
+          let valueClass = '';
+          
+          // Handle boolean status
+          if (key === 'status') {
+            displayValue = value ? 'Active' : 'Inactive';
+            valueClass = value ? 'status-true' : 'status-false';
+          } else if (key === 'sync') {
+            displayValue = value ? 'Synced' : 'Not Synced';
+            valueClass = value ? 'status-true' : 'status-false';
+          } else if (typeof value === "object") {
+            displayValue = JSON.stringify(value, null, 2);
+          }
+          
+          html += `
+            <div class="card-row">
+              <span class="card-label">${key}:</span>
+              <span class="card-value ${valueClass}">${displayValue}</span>
+            </div>
+          `;
         });
       } else {
-        html += `<tr><td colspan="2">${content}</td></tr>`;
+        html += `<div class="card-row"><span class="card-value">${content}</span></div>`;
       }
-      html += `</tbody></table>`;
+      
+      html += `</div>`;
     });
 
+    html += `</div>`;
     userDetailsDiv.innerHTML = html;
 
   } catch (error) {
