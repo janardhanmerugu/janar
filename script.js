@@ -175,7 +175,7 @@ async function loadUserDetails(userId, username) {
           
           // Handle boolean status
           if (key === 'status') {
-            displayValue = value ? 'Active' : 'Inactive';
+            displayValue = value ? 'Open' : 'Closed';
             valueClass = value ? 'status-true' : 'status-false';
           } else if (key === 'sync') {
             displayValue = value ? 'Synced' : 'Not Synced';
@@ -207,3 +207,4 @@ async function loadUserDetails(userId, username) {
     userDetailsDiv.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
 }
+
