@@ -101,7 +101,7 @@ async function loadUserDetails(userId, username) {
   userDetailsDiv.innerHTML = "Loading...";
 
   try {
-    const snapshot = await get(ref(db, `users/${userId}`));
+    const snapshot = await get(ref(db, `users/${userId}/lot`));
     const user = snapshot.val();
     if (!user) return userDetailsDiv.innerHTML = `<p>No data found for ${username}</p>`;
 
@@ -126,3 +126,4 @@ async function loadUserDetails(userId, username) {
     userDetailsDiv.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
 }
+
