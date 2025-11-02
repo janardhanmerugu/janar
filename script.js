@@ -108,9 +108,12 @@ async function loadUserDetails(userId, username) {
     let html = `<h3>Details for ${username}</h3>`;
 
     Object.entries(user).forEach(([section, content]) => {
-      html += `<h4>${section}</h4><table>`;
+     
       if (typeof content === "object") {
         Object.entries(content).forEach(([key, value]) => {
+          if(key == name){
+             html += `<h4>${key}</h4><table>`;
+          }
           html += `<tr><td><strong>${key}</strong></td><td>${typeof value === "object" ? JSON.stringify(value, null, 2) : value}</td></tr>`;
         });
       } else {
@@ -126,4 +129,5 @@ async function loadUserDetails(userId, username) {
     userDetailsDiv.innerHTML = `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
 }
+
 
