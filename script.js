@@ -124,14 +124,7 @@ async function loadUserDetails(userId, username) {
         .card-item:hover {
           box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
-        .card-header {
-          font-size: 18px;
-          font-weight: bold;
-          color: #333;
-          margin-bottom: 12px;
-          padding-bottom: 8px;
-          border-bottom: 2px solid #007bff;
-        }
+
         .card-content {
           display: flex;
           flex-wrap: wrap;
@@ -173,7 +166,6 @@ async function loadUserDetails(userId, username) {
 
     Object.entries(user).forEach(([itemId, content]) => {
       html += `<div class="card-item">`;
-      html += `<div class="card-header">${itemId}</div>`;
       html += `<div class="card-content">`;
       
       if (typeof content === "object" && content !== null) {
