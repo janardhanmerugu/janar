@@ -52,7 +52,7 @@ onAuthStateChanged(auth, user => {
   if (user) {
     userInfo.textContent = `Signed in as ${user.displayName}`;
     loginBtn.style.display = "none";
-    logoutBtn.style.display = "inline-block";
+    logoutBtn.style.display = "none";
     dataSection.style.display = "flex";
     loadUsers();
   } else {
