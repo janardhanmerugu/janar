@@ -1,4 +1,6 @@
-/* Simple Professional CSS */
+/* ===============================
+   ✅ GLOBAL STYLES
+================================*/
 * {
   margin: 0;
   padding: 0;
@@ -6,98 +8,127 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background-color: #f5f6fa;
   color: #333;
+  line-height: 1.6;
 }
 
-/* Header */
+/* Utility Reset */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ===============================
+   ✅ HEADER
+================================*/
 .top-header {
-  background-color: white;
-  border-bottom: 1px solid #ddd;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .navbar {
-  padding: 15px 30px;
   display: flex;
   align-items: center;
   gap: 20px;
+  padding: 15px 30px;
 }
 
-/* Search Bar */
+/* ===============================
+   🔍 SEARCH BAR
+================================*/
 .search-bar {
   flex: 1;
   max-width: 500px;
+  position: relative;
 }
 
 .search-control {
   width: 100%;
   padding: 10px 15px 10px 40px;
-  border: 1px solid #ddd;
+  border: 1px solid #d1d5db;
   border-radius: 25px;
   font-size: 14px;
-  background-color: #f9f9f9;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
 }
 
 .search-control:focus {
   outline: none;
   border-color: #2563eb;
-  background-color: white;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 .search-bar .position-absolute {
   left: 12px;
-  color: #666;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
 }
 
-/* Navigation */
+/* ===============================
+   ⚙️ NAVIGATION RIGHT ICONS
+================================*/
 .nav-right-links {
   display: flex;
-  gap: 10px;
-  list-style: none;
+  align-items: center;
+  gap: 12px;
   margin-left: auto;
 }
 
 .nav-link {
   padding: 10px;
-  color: #333;
-  text-decoration: none;
+  color: #374151;
   border-radius: 8px;
   position: relative;
+  transition: background-color 0.2s ease;
 }
 
 .nav-link:hover {
-  background-color: #f5f5f5;
+  background-color: #f3f4f6;
 }
 
+/* Notification Badge */
 .badge-notify {
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 4px;
+  right: 6px;
   background-color: #ef4444;
-  color: white;
-  font-size: 11px;
-  padding: 2px 6px;
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 5px;
   border-radius: 10px;
 }
 
-/* Dropdown */
+/* ===============================
+   👤 DROPDOWN MENU
+================================*/
 .dropdown-menu {
   position: absolute;
   top: 100%;
   right: 0;
   margin-top: 10px;
-  background-color: white;
-  border: 1px solid #ddd;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
   min-width: 250px;
   padding: 10px;
   display: none;
+  animation: fadeIn 0.25s ease;
 }
 
 .dropdown-menu.show {
@@ -108,27 +139,41 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 15px;
-  color: #333;
-  text-decoration: none;
+  padding: 10px 15px;
+  color: #374151;
   border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .dropdown-item:hover {
-  background-color: #f5f5f5;
+  background-color: #f3f4f6;
+  transform: translateX(3px);
 }
 
 .dropdown-divider {
-  margin: 10px 0;
-  border-top: 1px solid #ddd;
+  margin: 8px 0;
+  border-top: 1px solid #e5e7eb;
 }
 
 .user-name {
-  font-weight: bold;
+  font-weight: 600;
   margin-top: 10px;
 }
 
-/* Main Content */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   📦 MAIN CONTENT
+================================*/
 .main-wrapper {
   padding: 30px;
   max-width: 1200px;
@@ -138,40 +183,48 @@ body {
 .main-wrapper h1 {
   font-size: 28px;
   margin-bottom: 30px;
-  color: #333;
+  color: #111827;
 }
 
-/* Auth Section */
+/* ===============================
+   🔐 AUTH SECTION
+================================*/
 #auth-section {
-  background-color: white;
+  background-color: #fff;
   padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   text-align: center;
   max-width: 400px;
-  margin: 40px auto;
+  margin: 60px auto;
 }
 
 #userInfo {
   display: block;
   margin-bottom: 20px;
   font-size: 16px;
-  color: #666;
+  color: #6b7280;
 }
 
-#loginBtn,
-#logoutBtn {
-  padding: 12px 30px;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
+/* Buttons */
+button {
   cursor: pointer;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button:active {
+  transform: scale(0.97);
 }
 
 #loginBtn {
   background-color: #2563eb;
-  color: white;
+  color: #fff;
+  padding: 12px 30px;
+  font-size: 16px;
 }
 
 #loginBtn:hover {
@@ -180,117 +233,100 @@ body {
 
 #logoutBtn {
   background-color: #ef4444;
-  color: white;
+  color: #fff;
+  padding: 12px 30px;
+  font-size: 16px;
 }
 
 #logoutBtn:hover {
   background-color: #dc2626;
 }
 
-/* Data Section */
+/* ===============================
+   📊 DATA SECTION / TABLE
+================================*/
 #data-section {
   padding: 30px;
 }
 
 #table-container {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   overflow: hidden;
   margin-bottom: 30px;
 }
 
-/* Table */
+/* Table Styles */
 table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 15px;
 }
 
 thead {
   background-color: #2563eb;
-  color: white;
+  color: #fff;
 }
 
 thead th {
   padding: 15px;
   text-align: left;
-  font-weight: bold;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 tbody tr {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.2s ease;
 }
 
 tbody tr:hover {
-  background-color: #f9f9f9;
+  background-color: #f9fafb;
 }
 
 tbody td {
   padding: 15px;
 }
 
-/* User Details */
+/* ===============================
+   👤 USER DETAILS SECTION
+================================*/
 #userDetails {
-  background-color: white;
+  background-color: #fff;
   padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 #userDetails h2 {
   font-size: 22px;
   margin-bottom: 20px;
+  color: #111827;
 }
 
-/* Utility Classes */
-.position-relative {
-  position: relative;
-}
+/* ===============================
+   💡 UTILITY CLASSES
+================================*/
+.position-relative { position: relative; }
+.position-absolute { position: absolute; }
+.d-flex { display: flex; }
+.align-items-center { align-items: center; }
+.ms-auto { margin-left: auto; }
+.border { border: 2px solid #e5e7eb; }
+.rounded-circle { border-radius: 50%; }
+.p-1 { padding: 5px; }
+.mb-3 { margin-bottom: 15px; }
+.shadow { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.text-center { text-align: center; }
 
-.position-absolute {
-  position: absolute;
-}
-
-.d-flex {
-  display: flex;
-}
-
-.align-items-center {
-  align-items: center;
-}
-
-.ms-auto {
-  margin-left: auto;
-}
-
-.border {
-  border: 2px solid #ddd;
-}
-
-.rounded-circle {
-  border-radius: 50%;
-}
-
-.p-1 {
-  padding: 5px;
-}
-
-.mb-3 {
-  margin-bottom: 15px;
-}
-
-.shadow {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.text-center {
-  text-align: center;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
+/* ===============================
+   📱 RESPONSIVE DESIGN
+================================*/
+@media (max-width: 992px) {
   .navbar {
-    padding: 15px;
+    padding: 15px 20px;
+    gap: 12px;
   }
 
   .search-bar {
@@ -298,7 +334,7 @@ tbody td {
   }
 
   .main-wrapper {
-    padding: 15px;
+    padding: 20px;
   }
 
   .main-wrapper h1 {
