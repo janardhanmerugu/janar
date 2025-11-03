@@ -66,7 +66,7 @@ onAuthStateChanged(auth, user => {
 // Load all users
 async function loadUsers() {
   tableContainer.innerHTML = "Loading...";
-  userDetailsDiv.innerHTML = "";
+  userDetailsDiv.innerHTML = "none";
 
   try {
     const snapshot = await get(ref(db, "users"));
