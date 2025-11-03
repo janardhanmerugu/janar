@@ -1,0 +1,277 @@
+/* ===== Top Header Styles ===== */
+.top-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.top-header .navbar {
+  padding: 0.75rem 1.5rem;
+  min-height: 70px;
+}
+
+/* ===== Toggle Button ===== */
+.btn-toggle a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.btn-toggle a:hover {
+  background: #e8e8e8;
+  transform: scale(1.05);
+}
+
+/* ===== Search Bar ===== */
+.search-bar {
+  flex-grow: 1;
+  max-width: 500px;
+  margin: 0 1rem;
+}
+
+.search-control {
+  height: 45px;
+  border: 2px solid #e8e8e8;
+  background: #f8f9fa;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.search-control:focus {
+  border-color: #4a90e2;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+  outline: none;
+}
+
+.search-control::placeholder {
+  color: #999;
+}
+
+.search-bar .position-absolute {
+  color: #666;
+  pointer-events: none;
+}
+
+/* ===== Navigation Links ===== */
+.nav-right-links {
+  gap: 0.5rem;
+}
+
+.nav-right-links .nav-item {
+  position: relative;
+}
+
+.nav-right-links .nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  color: #555;
+  background: transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-right-links .nav-link:hover {
+  background: #f5f5f5;
+  color: #4a90e2;
+  transform: translateY(-2px);
+}
+
+.nav-right-links .nav-link i {
+  font-size: 24px;
+}
+
+/* ===== Badge Notifications ===== */
+.badge-notify {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(238, 90, 111, 0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* ===== User Avatar ===== */
+.dropdown-toggle-nocaret::after {
+  display: none;
+}
+
+.navbar .rounded-circle {
+  border: 2px solid #e8e8e8 !important;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.navbar .rounded-circle:hover {
+  border-color: #4a90e2 !important;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== Dropdown Menu ===== */
+.dropdown-user {
+  min-width: 280px;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 0;
+  margin-top: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-user .text-center {
+  padding: 1rem;
+}
+
+.dropdown-user .rounded-circle {
+  border: 3px solid #4a90e2 !important;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2) !important;
+}
+
+.dropdown-user .user-name {
+  margin-top: 0.5rem;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.dropdown-divider {
+  margin: 0.75rem 0;
+  border-color: #e8e8e8;
+}
+
+.dropdown-item {
+  padding: 0.75rem 1.5rem;
+  font-size: 14px;
+  color: #555;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: #f8f9fa;
+  color: #4a90e2;
+  padding-left: 1.75rem;
+}
+
+.dropdown-item i {
+  font-size: 20px;
+  color: #888;
+  transition: color 0.2s ease;
+}
+
+.dropdown-item:hover i {
+  color: #4a90e2;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 991px) {
+  .top-header .navbar {
+    padding: 0.5rem 1rem;
+  }
+
+  .search-bar {
+    max-width: 300px;
+    margin: 0 0.5rem;
+  }
+
+  .search-control {
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .nav-right-links .nav-link {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .search-bar {
+    max-width: 200px;
+  }
+
+  .dropdown-user {
+    min-width: 260px;
+    right: -20px;
+  }
+}
+
+@media (max-width: 575px) {
+  .search-bar {
+    flex-grow: 0;
+    max-width: 150px;
+  }
+
+  .search-control {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .search-bar .position-absolute {
+    display: none !important;
+  }
+}
+
+/* ===== Additional Pro Touches ===== */
+.top-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(74, 144, 226, 0.3), transparent);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+}
