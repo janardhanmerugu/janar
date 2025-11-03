@@ -39,46 +39,6 @@ ul {
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.navbar {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 15px 30px;
-}
-
-/* ===============================
-   🔍 SEARCH BAR
-================================*/
-.search-bar {
-  flex: 1;
-  max-width: 500px;
-  position: relative;
-}
-
-.search-control {
-  width: 100%;
-  padding: 10px 15px 10px 40px;
-  border: 1px solid #d1d5db;
-  border-radius: 25px;
-  font-size: 14px;
-  background-color: #f9fafb;
-  transition: all 0.2s ease;
-}
-
-.search-control:focus {
-  outline: none;
-  border-color: #2563eb;
-  background-color: #fff;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-}
-
-.search-bar .position-absolute {
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #6b7280;
-}
-
 /* ===============================
    ⚙️ NAVIGATION RIGHT ICONS
 ================================*/
@@ -177,7 +137,7 @@ ul {
 .main-wrapper {
   padding: 30px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .main-wrapper h1 {
@@ -196,7 +156,7 @@ ul {
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   text-align: center;
   max-width: 400px;
-  margin: 60px auto;
+  margin: 60px;
 }
 
 #userInfo {
