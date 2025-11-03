@@ -37,6 +37,16 @@ loginBtn.addEventListener("click", () => {
 // Logout
 logoutBtn.addEventListener("click", () => signOut(auth));
 
+// Logout button in dropdown
+const dropdownLogout = document.getElementById("dropdownLogout");
+if (dropdownLogout) {
+  dropdownLogout.addEventListener("click", (e) => {
+    e.preventDefault(); // stop page reload
+    signOut(auth);
+  });
+}
+
+
 // Track auth state
 onAuthStateChanged(auth, user => {
   if (user) {
